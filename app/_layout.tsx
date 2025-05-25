@@ -1,14 +1,20 @@
+import { SessionProvider } from "@/components/SessionContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import { StyleSheet } from "react-native";
+import { Provider } from "react-native-paper";
 
 export default function RootLayout() {
-  return <Stack>
-      <Stack.Screen name="index" options={{ ...actionButtons, title: "Home" }} />
-      <Stack.Screen name="allVacations" options={{ title: "All Vacations" }} /> 
-      <Stack.Screen name="settings" options={{ title: "Settings" }} />
-      <Stack.Screen name="about" options={{ title: "About" }} />
-    </Stack>;
+  return <SessionProvider>
+    <Provider>
+      <Stack>
+        <Stack.Screen name="index" options={{ ...actionButtons, title: "Home" }} />
+        <Stack.Screen name="allVacations" options={{ title: "All Vacations" }} /> 
+        <Stack.Screen name="settings" options={{ title: "Settings" }} />
+        <Stack.Screen name="about" options={{ title: "About" }} />
+      </Stack>
+    </Provider>
+  </SessionProvider>;
 }
 
 const stylesheet = StyleSheet.create({

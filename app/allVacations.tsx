@@ -1,16 +1,19 @@
+import { useMemRegion } from "@/components/SessionContext";
 import getHolidayData from "@/lib/getHolidayData";
 import getRegion from "@/lib/getRegion";
-import translateRegion from "@/lib/translateRegion";
 import { HolidayData, HolidayDataDates, Region } from "@/types/holiday";
 import { useState } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import DropdownSelect from "react-native-input-select";
 import { TFlatList } from "react-native-input-select/lib/typescript/src/types/index.types";
 
+import RegionChanger from "@/components/RegionChanger";
+
 export default function AllVacations() {
   const [data, setData] = useState<HolidayData | null>(null);
   const [region, setRegion] = useState<Region | null>(null);
   const [year, setYear] = useState<number>((new Date()).getFullYear());
+  const { memRegion } = useMemRegion();
 
   getHolidayData(year).then(setData);
   getRegion().then(setRegion);
@@ -55,11 +58,8 @@ export default function AllVacations() {
           <Text style={{ fontSize: 16 }}>{getDateByRegion(region, vacation.regions)}</Text>
         </View>
       ))}
-    
-      <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", marginTop: "auto" }}>
-        <Text style={{ }}>Region: {translateRegion(region)} • </Text>
-        <Text style={{ color: "#4D00FF", textDecorationLine: "underline" }} onPress={console.log}>Change</Text>
-      </View> 
+
+      <RegionChanger region={region}/>
     </ScrollView>
   );
 }

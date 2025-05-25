@@ -1,10 +1,15 @@
 import communeGeoJson from '@/assets/maps/communes.json';
 import proviceGeoJson from '@/assets/maps/provinces.json';
+import { useMemRegion } from '@/components/SessionContext';
 import { Region } from '@/types/holiday';
 import * as turf from '@turf/turf';
 import * as Location from 'expo-location';
 
 export default async function (): Promise<Region> {
+    const { memRegion } = useMemRegion();
+    if (memRegion)
+        return memRegion;
+
     const location = await getLocation();
     if (!location)
         return 'noord';
