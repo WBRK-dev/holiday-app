@@ -43,7 +43,7 @@ export default function Index() {
       >
         <ImageBackground
         source={data.image}
-        style={{ height: 200, borderRadius: 10, overflow: "hidden", marginBottom: 10, flex: 1 }}
+        style={{ height: 200, borderRadius: 10, overflow: "hidden", marginBottom: 10, flex: orientation === "LANDSCAPE" ? 1 : undefined }}
         imageStyle={{ borderRadius: 10 }}
       >
         <View
