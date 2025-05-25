@@ -1,7 +1,7 @@
 import RegionChanger from "@/components/RegionChanger";
-import { useMemRegion } from "@/components/SessionContext";
 import getHolidayData from "@/lib/getHolidayData";
 import getRegion from "@/lib/getRegion";
+import { useOrientation } from "@/lib/useOrientation";
 import { Region } from "@/types/holiday";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -12,7 +12,7 @@ export default function Index() {
   const router = useRouter();
   const [data, setData] = useState<{ label: string, daysLeft: number, image: any } | null>(null);
   const [region, setRegion] = useState<Region | null>(null);
-  const { memRegion, setMemRegion } = useMemRegion();
+  const orientation = useOrientation();
 
   getRegion().then(region => {
     setRegion(region);
@@ -38,9 +38,12 @@ export default function Index() {
 
   return (
     <View style={{ display: "flex", flexDirection: "column", flex: 1, padding: 10, }}>
-      <ImageBackground
+      <View
+        style={orientation === "LANDSCAPE" ? { display: "flex", flexDirection: "row", gap: 10} : {}}
+      >
+        <ImageBackground
         source={data.image}
-        style={{ height: 200, borderRadius: 10, overflow: "hidden", marginBottom: 10 }}
+        style={{ height: 200, borderRadius: 10, overflow: "hidden", marginBottom: 10, flex: 1 }}
         imageStyle={{ borderRadius: 10 }}
       >
         <View
@@ -75,6 +78,7 @@ export default function Index() {
         <Text>All vacations</Text>
         <MaterialIcons name="arrow-right-alt" size={24}/>
       </Pressable>
+      </View>
 
       <RegionChanger region={region}/>
     </View>
