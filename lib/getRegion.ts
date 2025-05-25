@@ -2,6 +2,8 @@ import communeGeoJson from '@/assets/maps/communes.json';
 import proviceGeoJson from '@/assets/maps/provinces.json';
 import { useMemRegion } from '@/components/SessionContext';
 import { Region } from '@/types/holiday';
+import { DefaultRegion } from '@/types/settings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as turf from '@turf/turf';
 import * as Location from 'expo-location';
 
@@ -9,6 +11,10 @@ export default async function (): Promise<Region> {
     const { memRegion } = useMemRegion();
     if (memRegion)
         return memRegion;
+
+    const defaultRegion = await AsyncStorage.getItem('defaultRegion') as DefaultRegion | null;
+    if (defaultRegion && defaultRegion !== 'gps')
+        return defaultRegion as Region;
 
     const location = await getLocation();
     if (!location)

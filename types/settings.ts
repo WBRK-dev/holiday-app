@@ -1,0 +1,1 @@
+export type DefaultRegion = "gps" | "noord" | "midden" | "zuid";

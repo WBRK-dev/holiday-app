@@ -1,8 +1,16 @@
+import { DefaultRegion } from "@/types/settings";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from "react";
-import { Alert, Button, Text, TextInput, View } from "react-native";
+import { Text, View } from "react-native";
+import DropdownSelect from "react-native-input-select";
 
-export default function Algemeen() {
-  let [value, setValue] = useState("");
+export default function Settings() {
+  let [defaultRegion, setDefaultRegion] = useState<DefaultRegion>("gps");
+
+  AsyncStorage.getItem('defaultRegion').then(val => {
+    if (val)
+      setDefaultRegion(val as DefaultRegion);
+  });
 
   return (
     <View
@@ -13,20 +21,22 @@ export default function Algemeen() {
         padding: 20,
       }}
     >
-      <Text style={{
-        fontWeight: "bold",
-        fontSize: 20,
-      }}>Test</Text>
-      <TextInput placeholder="Test" style={{
-        backgroundColor: "white",
-        borderColor: "#cccccc",
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        width: "100%",
-      }} value={value} onChangeText={setValue}/>
-      <Button title="Test" onPress={() => Alert.alert("Value", value)}/>
+      <Text style={{ fontSize: 20, fontWeight: 'bold'}}>Standard Region</Text>
+      <DropdownSelect
+        placeholder="Select an option..."
+        options={[
+          { label: "From GPS", value: "gps" },
+          { label: "North", value: "noord" },
+          { label: "Central", value: "midden" },
+          { label: "South", value: "zuid" },
+        ]}
+        selectedValue={defaultRegion}
+        onValueChange={(item) => {
+          setDefaultRegion(item as DefaultRegion);
+          AsyncStorage.setItem('defaultRegion', item as DefaultRegion);
+        }}
+        primaryColor={'green'}
+      />
     </View>
   );
 }
